@@ -14,10 +14,10 @@ class LocationData{
 }
 
 class Place {
-  final String title;
-  final double id;
-  final File image;
-  final LocationData location;
+  final String? title;
+  final double? id;
+  final File? image;
+  final LocationData? location;
   Place({
     required this.title,
     required this.id,

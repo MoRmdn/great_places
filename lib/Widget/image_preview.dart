@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 class ImagePreview extends StatefulWidget {
-  const ImagePreview({Key? key}) : super(key: key);
-
+  Function image;
+   ImagePreview(
+       this.image,
+      );
   @override
   _ImagePreviewState createState() => _ImagePreviewState();
 }
 
 class _ImagePreviewState extends State<ImagePreview> {
+
   var _iamgePicker;
+
+  Future<void> _imagePick()async{
+    final picker = ImagePicker();
+
+    var imageFile= await picker.pickImage(source: ImageSource.camera,maxWidth: 600);
+
+    setState(() {
+      _iamgePicker=File(imageFile!.path);
+    });
+
+      /// get directory my my app File Location
+    Directory appDir = await getApplicationDocumentsDirectory();
+      ///get file name
+    String fileName = basename(imageFile!.path);
+      ///store image in the device
+    File storedImage= await _iamgePicker.copy('${appDir.path}/$fileName');
+    widget.image(storedImage);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,14 +47,13 @@ class _ImagePreviewState extends State<ImagePreview> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               border: Border.all(
-                
                 width: 1,
                 color: Theme.of(context).colorScheme.primary,),
             ),
-            child: _iamgePicker == null ? Center(child: Text('Pick Your Image',),): Image.file(_iamgePicker!,fit: BoxFit.cover,)
+            child: _iamgePicker == null ? Center(child: Text('Pick Your Image',),): ClipRRect(borderRadius: BorderRadius.circular(6),child: Image.file(_iamgePicker!,fit: BoxFit.cover,))
           ),
           SizedBox(width: 10,),
-          Expanded(child: ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.camera_alt_outlined), label: Text('Take Pic'),)),
+          Expanded(child: ElevatedButton.icon(onPressed: _imagePick, icon: Icon(Icons.camera_alt_outlined), label: Text('Take Pic'),)),
         ],
       ),
     );

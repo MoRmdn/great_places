@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:great_places/Providers/great_places.dart';
+import 'package:great_places/Screens/add_place_screen.dart';
+import 'package:provider/provider.dart';
 
 
 import '../Widget/image_preview.dart';
@@ -9,41 +12,23 @@ class PlacesListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _titleController=TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Great Places'),
         actions: [
-          IconButton(onPressed: ()=> showModalBottomSheet(
-              context: context, builder: (BuildContext ctx){
-            return Column(children: [
-              Expanded(child: Column(children: [
-                Container(
-                  margin:const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                  padding:const EdgeInsets.fromLTRB(10,2,10,2),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5,),
-                      border: Border.all(color: Theme.of(context).colorScheme.primary,),
-                  ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      labelText:  "Place Name",
-                    ),
-                    controller: _titleController,
-                  ),
-                ),
-                SizedBox(height: 10,),
-                ImagePreview(),
-              ],),),
-              ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.add), label: Text('Add Place'),),
-            ],);
-          }),
-            icon: const Icon(Icons.add,),),
+         AddPlaceScreen(),
         ],
       ),
-      body: const Center(
-        child: CircularProgressIndicator(),
+      body:  Center(
+        child: Consumer<GreatPlaces>(
+            child: Text('no data entered'),
+            builder: (ctx,greatPlacesData,ch)=>ListView.builder(
+                itemCount: greatPlacesData.item.length,
+                itemBuilder: (BuildContext ctz,i)=>ListTile(
+                  leading:Text('${greatPlacesData.item[i].title}') 
+                  // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
+                ))),
       ),
     );
   }
