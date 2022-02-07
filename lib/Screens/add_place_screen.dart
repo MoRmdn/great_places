@@ -15,16 +15,16 @@ class AddPlaceScreen extends StatefulWidget {
 }
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
-  var _storedImage;
-  final TextEditingController _titleController=TextEditingController();
+   File? _storedImage;
+  final TextEditingController? _titleController =TextEditingController();
   void _image (File? image){
-    _storedImage= image;
+    _storedImage = image;
   }
   void _onSave(){
-    if(_storedImage==null||_titleController.text==null){
+    if(_storedImage==null||_titleController?.text == null){
       return;
     }
-    Provider.of<GreatPlaces>(context,listen: false).addPlace(_storedImage, _titleController.text);
+    Provider.of<GreatPlaces>(context,listen: false).addPlace(_storedImage, _titleController!.text);
     Navigator.of(context).pop();
   }
 
@@ -51,10 +51,10 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               controller: _titleController,
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           ImagePreview(_image),
         ],),),
-        ElevatedButton.icon(onPressed: _onSave, icon: Icon(Icons.add), label: Text('Add Place'),),
+        ElevatedButton.icon(onPressed: _onSave, icon: const Icon(Icons.add), label: const Text('Add Place'),),
       ],);
     }),
       icon: const Icon(Icons.add,),);

@@ -20,16 +20,21 @@ class _ImagePreviewState extends State<ImagePreview> {
   Future<void> _imagePick()async{
     final picker = ImagePicker();
 
-    var imageFile= await picker.pickImage(source: ImageSource.camera,maxWidth: 600);
+    ///pickImage() instead of getImage()
+    var imageFile= await ImagePicker().pickImage(source: ImageSource.camera,maxWidth: 600);
 
+    ///if user open the camera and back without picking image
+    if (imageFile==null){
+      return;
+    }
     setState(() {
-      _iamgePicker=File(imageFile!.path);
+      _iamgePicker=File(imageFile.path);
     });
 
-      /// get directory my my app File Location
+      /// get directory of my app File Location
     Directory appDir = await getApplicationDocumentsDirectory();
       ///get file name
-    String fileName = basename(imageFile!.path);
+    String fileName = basename(imageFile.path);
       ///store image in the device
     File storedImage= await _iamgePicker.copy('${appDir.path}/$fileName');
     widget.image(storedImage);
