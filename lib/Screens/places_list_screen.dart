@@ -16,13 +16,13 @@ class PlacesListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Great Places'),
-        actions: [
+        actions: const [
          AddPlaceScreen(),
         ],
       ),
       body:  Center(
         child: Consumer<GreatPlaces>(
-            child: Text('no data entered'),
+            child: const Text('no data entered'),
             builder: (ctx,greatPlacesData,ch)=>ListView.builder(
                 itemCount: greatPlacesData.item.length,
                 itemBuilder: (BuildContext ctz,i)=>ListTile(
