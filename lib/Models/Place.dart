@@ -8,7 +8,7 @@ class LocationData {
   final double longitude;
   final String?
       address; // i didn't add required in constructor so i need to add "?" after type to make it as can be null
-  LocationData({
+  const LocationData({
     required this.latitude,
     required this.longitude,
     this.address,

@@ -26,9 +26,6 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-     defaultConfig {
-        minSdkVersion 20
-    }
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
@@ -59,6 +56,9 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+    }
+    defaultConfig {
+        minSdkVersion 20
     }
 }
 

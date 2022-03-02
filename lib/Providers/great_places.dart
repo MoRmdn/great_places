@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:great_places/Helper/dp_helper.dart';
-import 'package:great_places/Models/pleace.dart';
+import 'package:great_places/Models/Place.dart';
 
 class GreatPlaces with ChangeNotifier {
   int? _idCounter;

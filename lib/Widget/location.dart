@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:great_places/Helper/location_helper.dart';
+import 'package:great_places/Screens/location_screen.dart';
 import 'package:location/location.dart';
 
 class LocationBuilder extends StatefulWidget {
@@ -22,6 +23,21 @@ class _LocationBuilderState extends State<LocationBuilder> {
     });
   }
 
+  Future<void> selectOnMap() async {
+    final selected = await Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => LocationScreen(
+          isSelected: true,
+        ),
+      ),
+    );
+    if (selected == null) {
+      return;
+    }
+    //..............
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,7 +50,9 @@ class _LocationBuilderState extends State<LocationBuilder> {
           height: 150,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: Colors.grey),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           child: imagePreview == null
               ? const Text('No Location Picked Yet')
@@ -51,7 +69,7 @@ class _LocationBuilderState extends State<LocationBuilder> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: selectOnMap,
               icon: const Icon(Icons.map),
               label: const Text('Pick Location'),
             ),
