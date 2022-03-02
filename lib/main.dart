@@ -4,13 +4,19 @@ import 'package:great_places/Screens/add_place_screen.dart';
 import 'package:great_places/Screens/places_list_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => GreatPlaces())],
-      child: const MyApp()));
-}
+void main() async => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => GreatPlaces(),
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const MyApp();
 
   @override
