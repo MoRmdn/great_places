@@ -22,6 +22,7 @@ class _ImagePreviewState extends State<ImagePreview> {
     final picker = ImagePicker();
 
     ///pickImage() instead of getImage()
+    ///
     var imageFile =
         await picker.pickImage(source: ImageSource.camera, maxWidth: 600);
 

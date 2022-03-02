@@ -16,14 +16,46 @@ class PlacesListScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Consumer<GreatPlaces>(
-            child: const Text('no data entered'),
-            builder: (ctx, greatPlacesData, ch) => ListView.builder(
-                itemCount: greatPlacesData.item.length,
-                itemBuilder: (BuildContext ctz, i) => ListTile(
-                    leading: Text('${greatPlacesData.item[i].title}')
-                    // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
-                    ))),
+        child: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false)
+              .fetchAndSetDataBase(),
+          builder: (ctx, snapShotData) => snapShotData.connectionState ==
+                  ConnectionState.waiting
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Consumer<GreatPlaces>(
+                  child: const Center(child: Text('no data entered')),
+                  builder: (ctx, greatPlacesData, ch) => GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 10,
+                    ),
+                    padding: const EdgeInsets.all(5),
+                    itemCount: greatPlacesData.item.length,
+                    itemBuilder: (BuildContext ctz, i) => greatPlacesData
+                            .item.isEmpty
+                        ? ch!
+                        : GridTile(
+                            child: Image.file(
+                              greatPlacesData.item[i].image!,
+                              fit: BoxFit.fill,
+                            ),
+                            footer: Container(
+                                color: Colors.black45,
+                                child: Center(
+                                  child: Text(
+                                    '${greatPlacesData.item[i].title}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ))
+                            // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
+                            ),
+                  ),
+                ),
+        ),
       ),
     );
   }

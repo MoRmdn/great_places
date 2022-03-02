@@ -1,19 +1,28 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:great_places/Helper/dp_helper.dart';
 import 'package:great_places/Models/pleace.dart';
-import 'package:provider/provider.dart';
 
 class GreatPlaces with ChangeNotifier {
-  double? _idCounter;
-  double idCounterM() {
+  int? _idCounter;
+  // static SharedPreferences? _prefs;
+
+  // static init() async => _prefs = await SharedPreferences.getInstance();
+
+  int idCounterM() {
+    if (_item.isNotEmpty) {
+      final lastOne = _item.last;
+      _idCounter = lastOne.id;
+    }
     _idCounter ??= 0;
     _idCounter = _idCounter! + 1;
+    // _prefs?.setInt('id', _idCounter!);
     return _idCounter!;
   }
 
-  final List<Place> _item = [];
+  List<Place> _item = [];
 
   /// retrive item copy of item list
   List<Place> get item {
@@ -21,7 +30,7 @@ class GreatPlaces with ChangeNotifier {
   }
 
   ///take image and place name and create instance of Place in the list
-  void addPlace(File? image, String title) {
+  Future<void> addPlace(File? image, String title) async {
     final newPlace =
         Place(id: idCounterM(), title: title, image: image!, location: null);
     _item.add(newPlace);
@@ -31,5 +40,21 @@ class GreatPlaces with ChangeNotifier {
       'title': newPlace.title!,
       'image': newPlace.image!.path,
     });
+  }
+
+  Future<void> fetchAndSetDataBase() async {
+    final data = await DBhelper.getDataFromDataBase('userPLaces');
+    _item = data
+        .map(
+          (e) => Place(
+            id: e['id']!,
+            title: e['title']!,
+            image: File(e['image']!),
+            location: null,
+          ),
+        )
+        .toList();
+
+    notifyListeners();
   }
 }
