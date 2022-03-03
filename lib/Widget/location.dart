@@ -4,28 +4,36 @@ import 'package:great_places/Helper/location_helper.dart';
 import 'package:great_places/Screens/location_screen.dart';
 import 'package:location/location.dart';
 
+// ignore: must_be_immutable
 class LocationBuilder extends StatefulWidget {
-  const LocationBuilder({Key? key}) : super(key: key);
+  Function? location;
+
+  LocationBuilder(this.location, {Key? key}) : super(key: key);
 
   @override
   State<LocationBuilder> createState() => _LocationBuilderState();
 }
 
 class _LocationBuilderState extends State<LocationBuilder> {
-  String? imagePreview;
+  String? _imagePreview;
 
-  Future<void> getLocation() async {
-    final myLocation = await Location().getLocation();
-    final location = LocationHelper.generateImagePreview(
-        altitude: myLocation.altitude!, longitude: myLocation.longitude!);
+  void imagePreview(double lat, lng) {
+    final location =
+        LocationHelper.generateImagePreview(altitude: lat, longitude: lng);
 
     setState(() {
-      imagePreview = location;
+      _imagePreview = location;
     });
   }
 
+  Future<void> getLocation() async {
+    final myLocation = await Location().getLocation();
+    imagePreview(myLocation.latitude!, myLocation.longitude);
+    widget.location!(myLocation.latitude, myLocation.longitude);
+  }
+
   Future<void> selectOnMap() async {
-    final LatLng? selected = await Navigator.of(context).push(
+    final LatLng? selectedLocation = await Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (ctx) => LocationScreen(
@@ -33,11 +41,11 @@ class _LocationBuilderState extends State<LocationBuilder> {
         ),
       ),
     );
-    if (selected == null) {
+    if (selectedLocation == null) {
       return;
     }
-    print(selected.latitude);
-    //..............
+    imagePreview(selectedLocation.latitude, selectedLocation.longitude);
+    widget.location!(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
@@ -46,7 +54,6 @@ class _LocationBuilderState extends State<LocationBuilder> {
       children: [
         Container(
           alignment: Alignment.center,
-          //padding: const EdgeInsets.fromLTRB(10, 2,),
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           width: double.infinity,
           height: 150,
@@ -56,12 +63,12 @@ class _LocationBuilderState extends State<LocationBuilder> {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          child: imagePreview == null
+          child: _imagePreview == null
               ? const Text('No Location Picked Yet')
               : ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    imagePreview!,
+                    _imagePreview!,
                     fit: BoxFit.fitWidth,
                     width: double.infinity,
                   ),

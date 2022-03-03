@@ -4,12 +4,12 @@ import 'package:great_places/Models/Place.dart';
 
 // ignore: must_be_immutable
 class LocationScreen extends StatefulWidget {
-  final LocationData? initialLocation;
+  final LocData? initialLocation;
   bool? isSelected;
 
   LocationScreen({
     Key? key,
-    this.initialLocation = const LocationData(
+    this.initialLocation = const LocData(
       latitude: 37.422,
       longitude: -122.84,
     ),
@@ -21,15 +21,12 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
   LatLng? _pickedLocation;
-  void selectLocation (LatLng position){
+  void selectLocation(LatLng position) {
     setState(() {
       _pickedLocation = position;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +35,13 @@ class _LocationScreenState extends State<LocationScreen> {
         centerTitle: true,
         title: const Text('Google Map'),
         actions: [
-          IconButton(onPressed: _pickedLocation ==null ? null : (){
-            Navigator.of(context).pop(_pickedLocation);
-          }, icon: const Icon(Icons.save)),
+          IconButton(
+              onPressed: _pickedLocation == null
+                  ? null
+                  : () {
+                      Navigator.of(context).pop(_pickedLocation);
+                    },
+              icon: const Icon(Icons.save)),
         ],
       ),
       body: GoogleMap(
@@ -51,10 +52,13 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
           zoom: 16,
         ),
-        onTap: widget.isSelected == false ?null:selectLocation,
-        markers: _pickedLocation == null ?{}:{
-          Marker(markerId: const MarkerId('m1'),position: _pickedLocation!),
-        },
+        onTap: widget.isSelected == false ? null : selectLocation,
+        markers: _pickedLocation == null
+            ? {}
+            : {
+                Marker(
+                    markerId: const MarkerId('m1'), position: _pickedLocation!),
+              },
       ),
     );
   }

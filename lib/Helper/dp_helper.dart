@@ -14,7 +14,7 @@ class DBhelper {
       createdDBpath,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE userPLaces(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT,image TEXT)',
+          'CREATE TABLE userPLaces(id INTEGER PRIMARY KEY AUTOINCREMENT,title TEXT,image TEXT,lat REAL,lng REAL,address TEXT)',
         );
       },
       version: 1,

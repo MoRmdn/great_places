@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:great_places/Helper/location_helper.dart';
+import 'package:great_places/Models/Place.dart';
 import 'package:great_places/Providers/great_places.dart';
 import 'package:great_places/Widget/image_preview.dart';
 import 'package:great_places/Widget/location.dart';
@@ -17,19 +19,32 @@ class AddPlaceScreen extends StatefulWidget {
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   File? _storedImage;
   final TextEditingController? _titleController = TextEditingController();
+  LocData? addressData;
 
   void _image(File? image) {
-    /// i will get it from anthor page
+    /// i will get it from anther page
     _storedImage = image;
   }
 
+  void _location(double lat, lng) async {
+    final _address = await LocationHelper.getAddress(lat, lng);
+    addressData = LocData(latitude: lat, longitude: lng, address: _address);
+  }
+
   void _onSave() {
-    if (_storedImage == null || _titleController?.text == null) {
+    if (_storedImage == null ||
+        _titleController?.text == null ||
+        addressData == null) {
       return;
     }
 
-    Provider.of<GreatPlaces>(context, listen: false)
-        .addPlace(_storedImage, _titleController!.text);
+    Provider.of<GreatPlaces>(context, listen: false).addPlace(
+      _storedImage,
+      _titleController!.text,
+      addressData!.latitude,
+      addressData!.longitude,
+      addressData!.address!,
+    );
     Navigator.of(context).pop();
   }
 
@@ -81,7 +96,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const LocationBuilder(),
+                        LocationBuilder(_location),
                       ],
                     ),
                   ),

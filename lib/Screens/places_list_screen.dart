@@ -28,38 +28,40 @@ class PlacesListScreen extends StatelessWidget {
               : Consumer<GreatPlaces>(
                   child: const Center(child: Text('no data entered')),
                   builder: (ctx, greatPlacesData, ch) => GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 10,
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    itemCount: greatPlacesData.item.length,
-                    itemBuilder: (BuildContext ctz, i) {
-                      return greatPlacesData
-                          .item.isEmpty
-                          ? ch!
-                          : GridTile(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                          child: Image.file(
-                            greatPlacesData.item[i].image!,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        footer: Container(
-                          color: Colors.black45,
-                          child: Center(
-                            child: Text(
-                              '${greatPlacesData.item[i].title}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),),
-                        // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
-                      );
-                    }
-                  ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 10,
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      itemCount: greatPlacesData.item.length,
+                      itemBuilder: (BuildContext ctz, i) {
+                        return greatPlacesData.item.isEmpty
+                            ? ch!
+                            : GridTile(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10)),
+                                  child: Image.file(
+                                    greatPlacesData.item[i].image!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                footer: Container(
+                                  color: Colors.black45,
+                                  child: Center(
+                                    child: Text(
+                                      '${greatPlacesData.item[i].location!.address}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
+                              );
+                      }),
                 ),
         ),
       ),

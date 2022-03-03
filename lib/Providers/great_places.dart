@@ -30,15 +30,27 @@ class GreatPlaces with ChangeNotifier {
   }
 
   ///take image and place name and create instance of Place in the list
-  Future<void> addPlace(File? image, String title) async {
-    final newPlace =
-        Place(id: idCounterM(), title: title, image: image!, location: null);
+  Future<void> addPlace(
+      File? image, String title, double lat, lng, String address) async {
+    final newPlace = Place(
+      id: idCounterM(),
+      title: title,
+      image: image!,
+      location: LocData(
+        latitude: lat,
+        longitude: lng,
+        address: address,
+      ),
+    );
     _item.add(newPlace);
     notifyListeners();
     DBhelper.insert('userPLaces', {
       'id': newPlace.id!,
       'title': newPlace.title!,
       'image': newPlace.image!.path,
+      'lat': newPlace.location!.latitude,
+      'lng': newPlace.location!.longitude,
+      'address': newPlace.location!.address!,
     });
   }
 
@@ -50,7 +62,8 @@ class GreatPlaces with ChangeNotifier {
             id: e['id']!,
             title: e['title']!,
             image: File(e['image']!),
-            location: null,
+            location: LocData(
+                latitude: e['lat'], longitude: e['lng'], address: e['address']),
           ),
         )
         .toList();
