@@ -36,24 +36,29 @@ class PlacesListScreen extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.all(5),
                     itemCount: greatPlacesData.item.length,
-                    itemBuilder: (BuildContext ctz, i) => greatPlacesData
-                            .item.isEmpty
-                        ? ch!
-                        : GridTile(
-                            child: Image.file(
-                              greatPlacesData.item[i].image!,
-                              fit: BoxFit.fill,
+                    itemBuilder: (BuildContext ctz, i) {
+                      return greatPlacesData
+                          .item.isEmpty
+                          ? ch!
+                          : GridTile(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                          child: Image.file(
+                            greatPlacesData.item[i].image!,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        footer: Container(
+                          color: Colors.black45,
+                          child: Center(
+                            child: Text(
+                              '${greatPlacesData.item[i].title}',
+                              style: const TextStyle(color: Colors.white),
                             ),
-                            footer: Container(
-                                color: Colors.black45,
-                                child: Center(
-                                  child: Text(
-                                    '${greatPlacesData.item[i].title}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ))
-                            // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
-                            ),
+                          ),),
+                        // CircleAvatar(backgroundImage: greatPlacesData.item[i].image,),
+                      );
+                    }
                   ),
                 ),
         ),
